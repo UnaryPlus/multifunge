@@ -127,7 +127,6 @@ def run(file):
   pointers = createPointers(program)
   while len(pointers) > 0:
     pointers = step(program, pointers)
-  print()
 
 def main():
   if len(sys.argv) == 2:

@@ -1,0 +1,20 @@
+   > !" bottles of beer on the wall"..v
+    v                                 <
+@99 >!" bottles of beer on the wall".v
+    v                                <
+    >!" bottles of beer".v
+    v                    <
+    >"Take one down and pass it around".-v
+                                      v1#*
+                                    v[=] *
+   ^                               [?]   <
+    v                               <
+    >"1 bottle of beer on the wall"..v
+    v                                <
+    >"1 bottle of beer on the wall".v
+    v                               <
+    >"1 bottle of beer".v
+    v                   <
+    >"Take one down and pass it around".v
+    v                                   <
+    >"No more bottles of beer on the wall".

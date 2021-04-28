@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import copy
 import sys
 
@@ -134,6 +136,6 @@ def main():
       run(file.read())
   else:
     print('You must state the name of a multifunge file.')
-    print('Example: python multifunge.py your-program.mfg')
+    print('Example: ./multifunge.py your-program.mfg')
 
 if __name__ == '__main__': main()

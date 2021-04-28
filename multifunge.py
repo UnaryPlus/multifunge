@@ -135,7 +135,6 @@ def main():
     with open(sys.argv[1], 'r') as file:
       run(file.read())
   else:
-    print('You must state the name of a multifunge file.')
-    print('Example: ./multifunge.py your-program.mfg')
+    print('Usage:', sys.argv[0], 'your-program.mfg')
 
 if __name__ == '__main__': main()

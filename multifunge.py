@@ -2,10 +2,13 @@
 
 import copy
 import sys
+import getch
 
 class Pointer:
   printing = False
   waiting = False
+  int_mode = True
+
   def __init__(self, row, column, value, direction):
     self.row = row
     self.column = column
@@ -112,8 +115,14 @@ def step(program, pointers):
     elif c == '+': p.value += 1
     elif c == '-': p.value -= 1
     elif c == '~': p.value *= -1
-    elif c == '?': p.value = int(input())
-    elif c == '!': print(p.value, end = '')
+    elif c == 'i': p.int_mode = True
+    elif c == 'c': p.int_mode = False
+    elif c == '?':
+        if p.int_mode: p.value = int(input())
+        else: p.value = ord(getch.getche())
+    elif c == '!':
+        if p.int_mode: print(p.value, end = '')
+        else: print(chr(p.value), end = '')
     elif c == '"': p.printing = True
     elif c == '.': print()
     elif c == '#': p.value = 0

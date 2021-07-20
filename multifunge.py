@@ -167,7 +167,7 @@ def step(program, pointers, inputFile):
     if not deleted: newPointers.append(p)
   return newPointers, inputFile
 
-def run(file, inputFile):
+def run(file, inputFile = None):
   program = toMatrix(file)
   pointers = createPointers(program)
   while len(pointers) > 0:
@@ -176,7 +176,7 @@ def run(file, inputFile):
 def main():
   if len(sys.argv) == 2:
     with open(sys.argv[1], 'r') as file:
-      run(file.read(), None)
+      run(file.read())
 
   elif len(sys.argv) == 3:
     with open(sys.argv[1], 'r') as file:

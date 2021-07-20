@@ -13,7 +13,7 @@ code = """
 @ ? \   v
 @?v
   \[+]!.
-  >    [*]!
+  >    [*]!.
 """
 multifunge.run(code)
 ```

@@ -114,20 +114,10 @@ def step(program, pointers):
       newPointers.append(Pointer(p.row, p.column, p.value, directions[0], p.intMode))
       newPointers.append(Pointer(p.row, p.column, p.value, directions[1], p.intMode))
     elif c == '/':
-      direction = {
-        'up' : 'right',
-        'right' : 'up',
-        'down' : 'left',
-        'left' : 'down'
-      } [p.direction]
+      direction = {'up':'right', 'right':'up', 'down':'left', 'left':'down'}[p.direction]
       newPointers.append(Pointer(p.row, p.column, p.value, direction, p.intMode))
     elif c == '\\':
-      direction = {
-        'up' : 'left',
-        'left' : 'up',
-        'down' : 'right',
-        'right' : 'down'
-      } [p.direction]
+      direction = {'up':'left', 'left':'up', 'down':'right', 'right':'down'}[p.direction]
       newPointers.append(Pointer(p.row, p.column, p.value, direction, p.intMode))
     elif c == '+': p.value += 1
     elif c == '-': p.value -= 1

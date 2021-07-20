@@ -7,13 +7,13 @@ import getch
 class Pointer:
   printing = False
   waiting = False
-  intMode = True
 
-  def __init__(self, row, column, value, direction):
+  def __init__(self, row, column, value, direction, intMode):
     self.row = row
     self.column = column
     self.value = value
     self.direction = direction
+    self.intMode = intMode
 
   def move(self):
     if self.waiting: return
@@ -48,7 +48,7 @@ def createPointers(program):
   for row, line in enumerate(program):
     for column, command in enumerate(line):
       if command == '@':
-        pointers.append(Pointer(row, column, 0, 'right'))
+        pointers.append(Pointer(row, column, 0, 'right', True))
   return pointers
 
 def step(program, pointers, inputFile):
@@ -110,8 +110,25 @@ def step(program, pointers, inputFile):
     elif c == '<': p.direction = 'left'
     elif c == '>': p.direction = 'right'
     elif c == '*':
-      newPointers.append(Pointer(p.row, p.column, p.value, 'up' if p.horizontal() else 'left'))
-      newPointers.append(Pointer(p.row, p.column, p.value, 'down' if p.horizontal() else 'right'))
+      directions = ['up', 'down'] if p.horizontal() else ['left', 'right']
+      newPointers.append(Pointer(p.row, p.column, p.value, directions[0], p.intMode))
+      newPointers.append(Pointer(p.row, p.column, p.value, directions[1], p.intMode))
+    elif c == '/':
+      direction = {
+        'up' : 'right',
+        'right' : 'up',
+        'down' : 'left',
+        'left' : 'down'
+      } [p.direction]
+      newPointers.append(Pointer(p.row, p.column, p.value, direction, p.intMode))
+    elif c == '\\':
+      direction = {
+        'up' : 'left',
+        'left' : 'up',
+        'down' : 'right',
+        'right' : 'down'
+      } [p.direction]
+      newPointers.append(Pointer(p.row, p.column, p.value, direction, p.intMode))
     elif c == '+': p.value += 1
     elif c == '-': p.value -= 1
     elif c == '~': p.value *= -1
@@ -131,6 +148,7 @@ def step(program, pointers, inputFile):
             num += inputFile[0]
             inputFile = inputFile[1:]
           p.value = int(num)
+          inputFile = inputFile[1:]
         # Get character from input file
         else:
           p.value = ord(inputFile[0])

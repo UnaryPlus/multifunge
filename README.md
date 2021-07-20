@@ -24,4 +24,8 @@ You can also use `<`, but this doesn't always work for some reason.
 
 The `run` function can take an additional string parameter. 
 In this case, the program will use the string as input instead of getting input from the user.
-For example, `run("@c?+!.", "a")` will run the program `@c?+!.` with the input `"a"`.
+For example, `multifunge.run("@c?+!.", "a")` will run the program `@c?+!.` with the input `"a"`.
+
+## Requirements
+* You need to have python 3 installed on your computer.
+* The interpreter makes use of the `getch` module, so you have to run `pip install getch` before doing anything else.

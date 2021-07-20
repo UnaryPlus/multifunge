@@ -20,4 +20,4 @@ multifunge.run(code)
 
 ## Requirements
 * You need to have python 3 installed on your computer.
-* The interpreter makes use of the `getch` module, so you have to run `pip install getch` before doing anything else.
+* The interpreter makes use of the "getch" module, so you have to run `pip install getch` before doing anything else.

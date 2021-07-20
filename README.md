@@ -10,9 +10,9 @@ Once you download the interpreter, there are two ways to run a multifunge progra
 ```python
 import multifunge
 code = """
-@ ? *   v
+@ ? \   v
 @?v
-  *[+]!.
+  \[+]!.
   >    [*]!
 """
 multifunge.run(code)

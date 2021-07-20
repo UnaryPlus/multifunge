@@ -2,15 +2,18 @@
 
 import copy
 import sys
+import getch
 
 class Pointer:
   printing = False
   waiting = False
-  def __init__(self, row, column, value, direction):
+
+  def __init__(self, row, column, value, direction, intMode):
     self.row = row
     self.column = column
     self.value = value
     self.direction = direction
+    self.intMode = intMode
 
   def move(self):
     if self.waiting: return
@@ -45,10 +48,10 @@ def createPointers(program):
   for row, line in enumerate(program):
     for column, command in enumerate(line):
       if command == '@':
-        pointers.append(Pointer(row, column, 0, 'right'))
+        pointers.append(Pointer(row, column, 0, 'right', True))
   return pointers
 
-def step(program, pointers):
+def step(program, pointers, inputFile):
   newPointers = []
   for pointer in pointers:
     # Copy pointer and call it 'p' so that 'pointers' doesn't change mid-loop
@@ -101,19 +104,59 @@ def step(program, pointers):
 
     # Otherwise, execute the command
     elif c == 'x': deleted = True
-    elif c == ';': return []
+    elif c == ';': return [], None
     elif c == '^': p.direction = 'up'
     elif c == 'v': p.direction = 'down'
     elif c == '<': p.direction = 'left'
     elif c == '>': p.direction = 'right'
     elif c == '*':
-      newPointers.append(Pointer(p.row, p.column, p.value, 'up' if p.horizontal() else 'left'))
-      newPointers.append(Pointer(p.row, p.column, p.value, 'down' if p.horizontal() else 'right'))
+      directions = ['up', 'down'] if p.horizontal() else ['left', 'right']
+      newPointers.append(Pointer(p.row, p.column, p.value, directions[0], p.intMode))
+      newPointers.append(Pointer(p.row, p.column, p.value, directions[1], p.intMode))
+    elif c == '/':
+      direction = {
+        'up' : 'right',
+        'right' : 'up',
+        'down' : 'left',
+        'left' : 'down'
+      } [p.direction]
+      newPointers.append(Pointer(p.row, p.column, p.value, direction, p.intMode))
+    elif c == '\\':
+      direction = {
+        'up' : 'left',
+        'left' : 'up',
+        'down' : 'right',
+        'right' : 'down'
+      } [p.direction]
+      newPointers.append(Pointer(p.row, p.column, p.value, direction, p.intMode))
     elif c == '+': p.value += 1
     elif c == '-': p.value -= 1
     elif c == '~': p.value *= -1
-    elif c == '?': p.value = int(input())
-    elif c == '!': print(p.value, end = '')
+    elif c == 'i': p.intMode = True
+    elif c == 'c': p.intMode = False
+    elif c == '?':
+      if inputFile == None:
+        # Get number from standard input
+        if p.intMode: p.value = int(input())
+        # Get character from standard input
+        else: p.value = ord(getch.getche())
+      else:
+        # Get number from input file
+        if p.intMode:
+          num = ''
+          while inputFile[0] != '\n':
+            num += inputFile[0]
+            inputFile = inputFile[1:]
+          p.value = int(num)
+          inputFile = inputFile[1:]
+        # Get character from input file
+        else:
+          p.value = ord(inputFile[0])
+          inputFile = inputFile[1:]
+
+    elif c == '!':
+      if p.intMode: print(p.value, end = '')
+      else: print(chr(p.value), end = '')
     elif c == '"': p.printing = True
     elif c == '.': print()
     elif c == '#': p.value = 0
@@ -122,19 +165,30 @@ def step(program, pointers):
 
     # Append pointer to new list of pointers if it hasn't been deleted
     if not deleted: newPointers.append(p)
-  return newPointers
+  return newPointers, inputFile
 
-def run(file):
+def run(file, inputFile):
   program = toMatrix(file)
   pointers = createPointers(program)
   while len(pointers) > 0:
-    pointers = step(program, pointers)
+    pointers, inputFile = step(program, pointers, inputFile)
 
 def main():
   if len(sys.argv) == 2:
     with open(sys.argv[1], 'r') as file:
-      run(file.read())
+      run(file.read(), None)
+
+  elif len(sys.argv) == 3:
+    with open(sys.argv[1], 'r') as file:
+      with open(sys.argv[2], 'r') as inputFile:
+        run(file.read(), inputFile.read())
+
   else:
-    print('Usage:', sys.argv[0], 'your-program.mfg')
+    print()
+    print('you must supply 1 or 2 files')
+    print('- path of multifunge file you wish to run')
+    print('- path of input file (optional)')
+    print('example: ' + sys.argv[0] + ' program.mfg input.txt')
+    print()
 
 if __name__ == '__main__': main()

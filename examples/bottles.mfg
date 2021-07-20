@@ -5,8 +5,8 @@
     >!" bottles of beer".v
     v                    <
     >"Take one down and pass it around".-v
-                                      v1#*
-                                    v[=] *
+                                      v1#/
+                                    v[=] /
    ^                               [?]   <
     v                               <
     >"1 bottle of beer on the wall"..v

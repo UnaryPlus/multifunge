@@ -51,7 +51,7 @@ def createPointers(program):
         pointers.append(Pointer(row, column, 0, 'right', True))
   return pointers
 
-def step(program, pointers, inputFile):
+def step(program, pointers):
   newPointers = []
   for pointer in pointers:
     # Copy pointer and call it 'p' so that 'pointers' doesn't change mid-loop
@@ -104,7 +104,7 @@ def step(program, pointers, inputFile):
 
     # Otherwise, execute the command
     elif c == 'x': deleted = True
-    elif c == ';': return [], None
+    elif c == ';': return []
     elif c == '^': p.direction = 'up'
     elif c == 'v': p.direction = 'down'
     elif c == '<': p.direction = 'left'
@@ -135,25 +135,8 @@ def step(program, pointers, inputFile):
     elif c == 'i': p.intMode = True
     elif c == 'c': p.intMode = False
     elif c == '?':
-      if inputFile == None:
-        # Get number from standard input
-        if p.intMode: p.value = int(input())
-        # Get character from standard input
-        else: p.value = ord(getch.getche())
-      else:
-        # Get number from input file
-        if p.intMode:
-          num = ''
-          while inputFile[0] != '\n':
-            num += inputFile[0]
-            inputFile = inputFile[1:]
-          p.value = int(num)
-          inputFile = inputFile[1:]
-        # Get character from input file
-        else:
-          p.value = ord(inputFile[0])
-          inputFile = inputFile[1:]
-
+      if p.intMode: p.value = int(input())
+      else: p.value = ord(getch.getche())
     elif c == '!':
       if p.intMode: print(p.value, end = '')
       else: print(chr(p.value), end = '')
@@ -165,30 +148,21 @@ def step(program, pointers, inputFile):
 
     # Append pointer to new list of pointers if it hasn't been deleted
     if not deleted: newPointers.append(p)
-  return newPointers, inputFile
+  return newPointers
 
-def run(file, inputFile = None):
+def run(file):
   program = toMatrix(file)
   pointers = createPointers(program)
   while len(pointers) > 0:
-    pointers, inputFile = step(program, pointers, inputFile)
+    pointers = step(program, pointers)
 
 def main():
   if len(sys.argv) == 2:
     with open(sys.argv[1], 'r') as file:
       run(file.read())
 
-  elif len(sys.argv) == 3:
-    with open(sys.argv[1], 'r') as file:
-      with open(sys.argv[2], 'r') as inputFile:
-        run(file.read(), inputFile.read())
-
   else:
-    print()
-    print('you must supply 1 or 2 files')
-    print('- path of multifunge file you wish to run')
-    print('- path of input file (optional)')
-    print('example: ' + sys.argv[0] + ' program.mfg input.txt')
-    print()
+    print('incorrect number of arguments')
+    print('example: ' + sys.argv[0] + ' program.mfg')
 
 if __name__ == '__main__': main()

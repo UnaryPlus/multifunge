@@ -2,7 +2,21 @@
 
 import copy
 import sys
-import getch
+
+def getch():
+  try:
+    import msvcrt
+    return msvcrt.getch()
+  except ImportError:
+    import sys, tty, termios
+    fd = sys.stdin.fileno()
+    oldSettings = termios.tcgetattr(fd)
+    try:
+      tty.setraw(sys.stdin.fileno())
+      c = sys.stdin.read(1)
+    finally:
+      termios.tcsetattr(fd, termios.TCSADRAIN, oldSettings)
+    return c
 
 class Pointer:
   printing = False
@@ -126,7 +140,7 @@ def step(program, pointers):
     elif c == 'c': p.intMode = False
     elif c == '?':
       if p.intMode: p.value = int(input())
-      else: p.value = ord(getch.getche())
+      else: p.value = ord(getch())
     elif c == '!':
       if p.intMode: print(p.value, end = '')
       else: print(chr(p.value), end = '')

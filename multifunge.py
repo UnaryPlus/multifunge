@@ -1,3 +1,6 @@
+# (c) 2022 Owen Bechtel
+# License: MIT (see LICENSE file)
+
 #!/usr/bin/env python3
 
 import copy
